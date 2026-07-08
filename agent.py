@@ -23,6 +23,22 @@ SCOPES = [
 
 
 def get_google_credentials():
+    # Serverless path (e.g. Vercel): rebuild credentials from env vars and
+    # refresh in-memory. There's no browser and no writable token.json there.
+    refresh_token = os.environ.get("GOOGLE_REFRESH_TOKEN")
+    if refresh_token:
+        creds = Credentials(
+            token=None,
+            refresh_token=refresh_token,
+            token_uri="https://oauth2.googleapis.com/token",
+            client_id=os.environ["GOOGLE_CLIENT_ID"],
+            client_secret=os.environ["GOOGLE_CLIENT_SECRET"],
+            scopes=SCOPES,
+        )
+        creds.refresh(Request())
+        return creds
+
+    # Local dev path: interactive browser flow, cached in token.json.
     creds = None
     if os.path.exists("token.json"):
         creds = Credentials.from_authorized_user_file("token.json", SCOPES)
@@ -201,6 +217,7 @@ def run():
     response = agent("What did I miss? Give me my morning briefing.")
     print(response)
     send_slack_dm(str(response))
+    return str(response)
 
 
 if __name__ == "__main__":

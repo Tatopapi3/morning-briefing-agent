@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "api/briefing.py": {
+      "maxDuration": 60
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/briefing",
+      "schedule": "0 11 * * *"
+    }
+  ]
+}

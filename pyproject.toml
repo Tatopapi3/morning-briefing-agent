@@ -1,0 +1,17 @@
+[project]
+name = "morning-briefing-agent"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "strands-agents",
+    "strands-agents-tools",
+    "litellm",
+    "google-auth",
+    "google-auth-oauthlib",
+    "google-api-python-client",
+    "slack_sdk",
+    "python-dotenv",
+]
+
+[tool.vercel]
+entrypoint = "api.briefing:handler"
